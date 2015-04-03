@@ -71,7 +71,6 @@ void parseNb(JSONObject json)
   tmp = json.getInt("nb");
   nbIn = tmp - nbFixe;
   nbFixe = tmp;
-  println(nbIn);
   if (nbIn > 0)
   {
     while (i < nbCubesW && i != nbIn)

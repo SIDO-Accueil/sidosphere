@@ -14,7 +14,7 @@ class Cube
   int z = 0;
   boolean isPop, go;
   boolean asMoon, fromTable, goOut, goIn, refresh;
-  float downY = 1600, downZ = 200;
+  float downY = 1410, downZ = 320;
   String id;
 
   Cube(float speedY, float speedZ, float tranX, float tranZ)
@@ -152,16 +152,13 @@ class Cube
     drawSidome();
   }
 
-  //  float downY = 1600, downZ = -200;
-
   void popDown()
   {
     translate(width / 2, this.downY, this.downZ);
-
-    if (this.downY <= (height / 2))
+    if (this.downY <= (height * 0.33))
     {
-      this.downY = height / 2;
-      this.downZ -= 25;
+      this.downY = height * 0.33;
+      this.downZ -= 40;
       if (this.downZ <= -7000)
         {
           this.fromTable = false;
@@ -172,21 +169,7 @@ class Cube
         }
     }
     else
-      this.downY -= 20;
-
-/*
-    this.downZ -= 40;
-    this.downY -= 15;
-*/
-    if (this.downZ <= -7000)
-      {
-        this.fromTable = false;
-        this.clr = 0;
-        this.clg = 0;
-        this.clb = 0;
-        this.goIn = true;
-      }
-
+      this.downY -= 3;
     drawSidome();
   }
 
