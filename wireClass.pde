@@ -63,7 +63,7 @@ class WireCube
       this.pos -= 5;
       this.x = (this.x < this.cubeTranX ? this.x + 5 : this.cubeTranX);
       if (this.pos < this.cubeTranZ)
-        this.isPop = false;
+	this.isPop = false;
     }
   }
 
@@ -76,7 +76,14 @@ class WireCube
     {
       this.goOut = false;
       this.id = 0;
+      this.x = 0;
+      this.go = false;
+      this.isPop = true;
+      this.id = 0;
+      this.pos = -7000;
+      this.clr = 255;
+      this.clg = 255;
+      this.clb = 255;
     }
   }
 }
-

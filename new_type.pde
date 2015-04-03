@@ -33,7 +33,12 @@ void drawWire()
       tranRota(WireC[i].speedRota);
       if (WireC[i].isPop)
         WireC[i].popWireCube();
-      else
+      else if (WireC[i].goOut)
+      {
+        WireC[i].out();
+        WireC[i].tranShape(WireC[i].cubeTranZ, WireC[i].cubeTranX);
+        WireC[i].display();
+      } else
       {
         WireC[i].tranShape(WireC[i].cubeTranZ, WireC[i].cubeTranX);
         WireC[i].display();
@@ -55,24 +60,22 @@ void drawSido()
     if (Cubes[i].id != null)
     {
       if (Cubes[i].goOut)
-        {
-          tranRota(Cubes[i].speedRota);
-          Cubes[i].out();
-          Cubes[i].display();
-        }
-      else if (Cubes[i].goIn)
-        {
-          tranRota(Cubes[i].speedRota);
-          Cubes[i].in();
-          Cubes[i].display();
-        }
-      else if (Cubes[i].fromTable)
+      {
+        tranRota(Cubes[i].speedRota);
+        Cubes[i].out();
+        Cubes[i].display();
+      } else if (Cubes[i].goIn)
+      {
+        tranRota(Cubes[i].speedRota);
+        Cubes[i].in();
+        Cubes[i].display();
+      } else if (Cubes[i].fromTable)
         Cubes[i].popDown();
       else
-        {
-          tranRota(Cubes[i].speedRota);
-          Cubes[i].display();
-        }
+      {
+        tranRota(Cubes[i].speedRota);
+        Cubes[i].display();
+      }
     }
     i++;
     popMatrix();
@@ -82,13 +85,13 @@ void drawSido()
 void drawCubes()
 {  
   int i = 0;
-/*
+  /*
   directionalLight(255, 255, 255, 0.050000012, -0.6576705, -1);
-  directionalLight(255, 255, 255, 0.02352941, 0.43323863, -1);
-  directionalLight(255, 255, 255, 0.5323529, 0.42471594, -1);
-  directionalLight(255, 255, 255, 0.12647057, -0.024147749, 1);
-  directionalLight(255, 255, 255, -0.27647054, 0.009943187, 1);
-*/
+   directionalLight(255, 255, 255, 0.02352941, 0.43323863, -1);
+   directionalLight(255, 255, 255, 0.5323529, 0.42471594, -1);
+   directionalLight(255, 255, 255, 0.12647057, -0.024147749, 1);
+   directionalLight(255, 255, 255, -0.27647054, 0.009943187, 1);
+   */
   drawWire();
   drawSido();
 }
@@ -121,10 +124,35 @@ void setup()
 {
   size(L, H, P3D);
   createCubes();
-  load();
+  qzeMysql = new MySQL(this, "qze.fr", "sido", "sido", "passwordSido?8!");
+  textSize(TEXT_SIZE);
+  /*
+  loadLegend();
+   load();
+   */
+  thread("load");
+  thread("loadLegend");
 }
 
 boolean loadValue = true;
+
+MySQL        qzeMysql;
+String       apple_percent;
+String       android_percent;
+String       win_percent;
+String       autre_percent;
+float[]      gpercent = new float[11];        //apple = 0; android = 1; windows = 2; autre = 3; 4 = total number of detected since the last half day
+int          TEXT_SIZE = 12;
+int          percent_offset = 19;
+float        multH = 0.82;
+
+void  display_stats() 
+{
+  fill(255, 255, 255);
+
+  text("#iot:\n#sido:\nApple iOS:\nAndroid:\nWindows Phone:\nOther (computers): ", 8, height * multH, 0);
+  text(int(gpercent[4]) + "\n" + int(gpercent[5]) + "\n" + gpercent[0] + "%\n" + gpercent[1] + "%\n" + gpercent[2] + "%\n" + gpercent[3] + "%\n", TEXT_SIZE * percent_offset, height * multH, 0);
+}
 
 void draw()
 {
@@ -133,9 +161,10 @@ void draw()
   {
     loadValue = false;
     thread("load");
-  } 
-  else if (second() % 2 != 0)
+    thread("loadLegend");
+  } else if (second() % 2 != 0)
     loadValue = true;
+  display_stats();
   drawCubes();
 }
 

@@ -1,3 +1,9 @@
+import de.bezier.data.sql.*;
+import processing.net.*;
+
+JSONObject json;
+JSONObject perso;
+
 void parsColor(int j, JSONObject perso)
 {
   JSONObject colo = perso.getJSONObject("color");
@@ -11,14 +17,14 @@ void parsColor(int j, JSONObject perso)
     Cubes[j].clr = r;
     Cubes[j].clg = g;
     Cubes[j].clb = b;
-  }  
+  }
 }
- 
+
 
 void parseVertex(int j, JSONObject perso)
 {
   int k = 0;
- 
+
   JSONObject vertex = perso.getJSONObject("nodes");
   while (k < 8)
   {
@@ -36,12 +42,14 @@ void parseIn(JSONObject json)
   int j = 0;
   JSONArray in = json.getJSONArray("in");
 
-  while (j < in.size() && j < nbCubes)
+  while (j < in.size () && j < nbCubes)
   {
-    JSONObject perso = in.getJSONObject(j);
+    perso = in.getJSONObject(j);
     String id = perso.getString("id");
-    if (!checkId(id, false))
+    if (!checkId(id, false, true))
     {
+      while (j < nbCubes && Cubes[j].id != null)
+        j++;
       boolean fromTable = perso.getBoolean("fromTable");
       boolean twitter = perso.getBoolean("hasTwitter");
       Cubes[j].setBase(id, twitter, fromTable);
@@ -49,8 +57,8 @@ void parseIn(JSONObject json)
         Cubes[j].goIn = true;
       parsColor(j, perso);
       parseVertex(j, perso);
-    }
-    j++;
+    } else
+      j++;
   }
 }
 
@@ -63,31 +71,31 @@ void parseNb(JSONObject json)
   tmp = json.getInt("nb");
   nbIn = tmp - nbFixe;
   nbFixe = tmp;
+  println(nbIn);
   if (nbIn > 0)
   {
-    while (i != nbIn && i < nbCubesW)
+    while (i < nbCubesW && i != nbIn)
     {
       pos = 0;
-      while (WireC[pos].id != 0 && pos < nbCubesW)
+      while (pos < nbCubesW && WireC[pos].id != 0)
         pos++;
       WireC[pos].id = i + 1;
+      WireC[pos].isPop = true;
       i++;
     }
-  }
-/*
-  else
+  } else if (nbIn < 0)
   {
     pos = 0;
-    while (WireC[pos].id != 0 && pos < nbCubesW)
+    while (pos < nbCubesW && WireC[pos].id != 0)
       pos++;
-    while (nbIn >= 0)
+    pos -= 1;
+    while (nbIn < 0)
     {
       WireC[pos].goOut = true;
       pos--;
       nbIn++;
     }
   }
-*/
 }
 
 void parseOut(JSONObject json)
@@ -95,25 +103,45 @@ void parseOut(JSONObject json)
   int j = 0;
   JSONArray out = json.getJSONArray("out");
 
-  while (j < out.size())
+  while (j < out.size ())
   {
-    JSONObject obj = out.getJSONObject(j);    
+    JSONObject obj = out.getJSONObject(j);
     String id = obj.getString("id");
-    checkId(id, true);
+    checkId(id, true, false);
     j++;
   }
+}
+
+void loadLegend()
+{
+  JSONObject json;
+
+  GetRequest get = new GetRequest("http://sido.qze.fr:3000/stats");
+  get.send();
+  json = parseJSONObject(get.getContent());
+  println(get.getContent());
+
+  gpercent[0] = json.getFloat("ios");
+  gpercent[1] = json.getFloat("android");
+  gpercent[2] = json.getFloat("win");
+  gpercent[3] = json.getFloat("other");
+  gpercent[4] = json.getFloat("iot");
+  gpercent[5] = json.getFloat("sido");
 }
 
 void load()
 {
   JSONObject json;
-
+  /*
+  json = loadJSONObject("in.json");
+   */
   GetRequest get = new GetRequest("http://sido.qze.fr:3000/sidomes");
   get.send();
   json = parseJSONObject(get.getContent());
+  println(get.getContent());
   parseNb(json);
   parseIn(json);
-  parseOut(json);  
+  parseOut(json);
 }
 
 void deleteCube(String id)
@@ -131,7 +159,18 @@ void deleteCube(String id)
   }
 }
 
-boolean checkId(String id, boolean out)
+void refresh(int j)
+{
+  boolean fromTable = perso.getBoolean("fromTable");
+  boolean twitter = perso.getBoolean("hasTwitter");
+  Cubes[j].setBase(Cubes[j].id, twitter, fromTable);
+  if (!fromTable)
+    Cubes[j].goIn = true;
+  parsColor(j, perso);
+  parseVertex(j, perso);
+}
+
+boolean checkId(String id, boolean out, boolean ref)
 {
   int i = 0;
 
@@ -139,8 +178,10 @@ boolean checkId(String id, boolean out)
   {
     if (Cubes[i].id != null && id.equals(Cubes[i].id))
     {
-      println(Cubes[i].goOut);
-      Cubes[i].goOut = out;
+      if (ref)
+        refresh(i);
+      if (out)
+        Cubes[i].goOut = true;
       return true;
     }
     i++;

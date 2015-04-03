@@ -13,8 +13,8 @@ class Cube
   float clr, clb, clg, newclr, newclb, newclg;
   int z = 0;
   boolean isPop, go;
-  boolean asMoon, fromTable, goOut, goIn;
-  float downY = 1600, downZ = 100;
+  boolean asMoon, fromTable, goOut, goIn, refresh;
+  float downY = 1600, downZ = 200;
   String id;
 
   Cube(float speedY, float speedZ, float tranX, float tranZ)
@@ -38,6 +38,7 @@ class Cube
     this.goOut = false;
     this.goIn = false;
     this.id = null;
+    this.refresh = false;
   }
 
   void setBase(String id, boolean asMoon, boolean fromTable)
@@ -45,6 +46,9 @@ class Cube
     this.id = id;
     this.asMoon = asMoon;
     this.fromTable = fromTable;
+    println(this.fromTable + " " + fromTable);
+    this.goOut = false;
+    this.goIn = false;
   }
 
   void setGoOut(boolean go)
@@ -152,7 +156,6 @@ class Cube
 
   void popDown()
   {
-    println(this.downY + "  " + this.downZ);
     translate(width / 2, this.downY, this.downZ);
 
     if (this.downY <= (height / 2))
@@ -204,7 +207,6 @@ class Cube
     clr = (clr < newclr ? clr + 5 : newclr);
     clg = (clg < newclg ? clg + 5 : newclg);
     clb = (clb < newclb ? clb + 5 : newclb);
-    println(clr +" " + clg + " "  + clb);
     if (clr >= newclr && clg >= newclg && clb >= newclb)
       this.goIn = false;
   }
