@@ -2,7 +2,6 @@ import http.requests.*;
 
 int L = 1408, H = 640;
 int nbCubes = 150;
-int nbCubesW = 100;
 
 int sizeBelt = 12;
 int base = 18, max = 20, min = 10;
@@ -10,9 +9,10 @@ int baseW = 18, maxW = 10, minW = 15;
 int sizeCube = 20;
 int posCam = -1300;
 int nbIn = 0, nbFixe = 0;
+int nbCubesW = 100;
 
-Cube[] Cubes = new Cube[nbCubes];
-WireCube[] WireC = new WireCube[nbCubesW];
+Cube[] Cubes = new Cube[nbCubes + 1];
+WireCube[] WireC = new WireCube[nbCubesW + 1];
 
 void tranRota(float value)
 {
@@ -85,13 +85,12 @@ void drawSido()
 void drawCubes()
 {  
   int i = 0;
-  /*
+
   directionalLight(255, 255, 255, 0.050000012, -0.6576705, -1);
-   directionalLight(255, 255, 255, 0.02352941, 0.43323863, -1);
-   directionalLight(255, 255, 255, 0.5323529, 0.42471594, -1);
-   directionalLight(255, 255, 255, 0.12647057, -0.024147749, 1);
-   directionalLight(255, 255, 255, -0.27647054, 0.009943187, 1);
-   */
+  directionalLight(255, 255, 255, 0.02352941, 0.43323863, -1);
+  directionalLight(255, 255, 255, 0.5323529, 0.42471594, -1);
+  directionalLight(255, 255, 255, 0.12647057, -0.024147749, 1);
+  directionalLight(255, 255, 255, -0.27647054, 0.009943187, 1);
   drawWire();
   drawSido();
 }

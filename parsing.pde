@@ -65,36 +65,39 @@ void parseIn(JSONObject json)
 void parseNb(JSONObject json)
 {
   int tmp = 0;
+  int plus;
   int i = 0;
-  int pos;
+  int pos = 0;
 
   tmp = json.getInt("nb");
+  tmp = (tmp > 100 ? 100 : tmp);
   nbIn = tmp - nbFixe;
-  nbFixe = tmp;
   if (nbIn > 0)
   {
-    while (i < nbCubesW && i != nbIn)
+    while (i < nbCubesW && i < nbIn)
     {
       pos = 0;
       while (pos < nbCubesW && WireC[pos].id != 0)
         pos++;
+      pos = (pos >= 100 ? 99 : pos);
       WireC[pos].id = i + 1;
       WireC[pos].isPop = true;
       i++;
     }
-  } else if (nbIn < 0)
+  } 
+  else if (nbIn < 0)
   {
-    pos = 0;
-    while (pos < nbCubesW && WireC[pos].id != 0)
+    nbIn = nbFixe - tmp;
+    while (pos < nbCubesW - 1 && WireC[pos].id != 0)
       pos++;
-    pos -= 1;
-    while (nbIn < 0)
+    while (nbIn != 0 && pos > 0)
     {
       WireC[pos].goOut = true;
       pos--;
-      nbIn++;
+      nbIn--;
     }
   }
+  nbFixe = tmp;
 }
 
 void parseOut(JSONObject json)
@@ -119,7 +122,6 @@ void loadLegend()
   get.send();
   json = parseJSONObject(get.getContent());
   println(get.getContent());
-
   gpercent[0] = json.getFloat("ios");
   gpercent[1] = json.getFloat("android");
   gpercent[2] = json.getFloat("win");
@@ -131,9 +133,9 @@ void loadLegend()
 void load()
 {
   JSONObject json;
-  /*
+/*
   json = loadJSONObject("in.json");
-   */
+*/
   GetRequest get = new GetRequest("http://sido.qze.fr:3000/sidomes");
   get.send();
   json = parseJSONObject(get.getContent());

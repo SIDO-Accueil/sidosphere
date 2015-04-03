@@ -46,7 +46,6 @@ class Cube
     this.id = id;
     this.asMoon = asMoon;
     this.fromTable = fromTable;
-    println(this.fromTable + " " + fromTable);
     this.goOut = false;
     this.goIn = false;
   }
@@ -155,9 +154,9 @@ class Cube
   void popDown()
   {
     translate(width / 2, this.downY, this.downZ);
-    if (this.downY <= (height * 0.33))
+    if (this.downY <= (height * 0.45))
     {
-      this.downY = height * 0.33;
+      this.downY = height * 0.45;
       this.downZ -= 40;
       if (this.downZ <= -7000)
         {
