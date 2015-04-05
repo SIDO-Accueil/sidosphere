@@ -84,7 +84,7 @@ class Cube
   void drawMoon()
   {
     rotate(angleMoon, 0, 90, 0);
-    translate(35, 0, 35);
+    translate(30, 0, 30);
     noStroke();
     lights();
     fill(255, 255, 255);

@@ -7,7 +7,7 @@ int nbIn = 0, nbFixe = 0, nbSup = 0;
 
 boolean depop(int pos)
 {
-  if (second() % 10 == 0 && nbFixe > 60)
+  if (second() % 20 == 0 && nbFixe > 60)
    {
      nbFixe -= 3;
      nbIn = 3;
@@ -34,7 +34,7 @@ void parseNb(JSONObject json)
   int pos = 0;
 
   tmp = json.getInt("nb");
-  if (!depop(pos) && nbFixe > 0)
+  if (!depop(pos) && nbFixe >= 0)
   {
     nbIn = tmp - nbSup;
     if (nbIn > 0)

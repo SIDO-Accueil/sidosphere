@@ -13,6 +13,17 @@ int nbCubesW = 100;
 Cube[] Cubes = new Cube[nbCubes + 1];
 WireCube[] WireC = new WireCube[nbCubesW + 1];
 
+boolean loadValue = true;
+MySQL        qzeMysql;
+String       apple_percent;
+String       android_percent;
+String       win_percent;
+String       autre_percent;
+float[]      gpercent = new float[11];        //apple = 0; android = 1; windows = 2; autre = 3; 4 = total number of detected since the last half day
+int          TEXT_SIZE = 12;
+int          percent_offset = 19;
+float        multH = 0.82;
+
 void tranRota(float value)
 {
   translate(width / 2, height / 2, posCam);
@@ -125,18 +136,6 @@ void setup()
   qzeMysql = new MySQL(this, "qze.fr", "sido", "sido", "passwordSido?8!");
   textSize(TEXT_SIZE);
 }
-
-boolean loadValue = true;
-
-MySQL        qzeMysql;
-String       apple_percent;
-String       android_percent;
-String       win_percent;
-String       autre_percent;
-float[]      gpercent = new float[11];        //apple = 0; android = 1; windows = 2; autre = 3; 4 = total number of detected since the last half day
-int          TEXT_SIZE = 12;
-int          percent_offset = 19;
-float        multH = 0.82;
 
 void  display_stats() 
 {
