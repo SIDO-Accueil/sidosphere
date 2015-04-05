@@ -11,9 +11,9 @@ class Cube
   Float[] vy = new Float[8];
   Float[] vz = new Float[8];
   float clr, clb, clg, newclr, newclb, newclg;
-  int z = 0;
+  int z = 0, asMoon;
   boolean isPop, go;
-  boolean asMoon, fromTable, goOut, goIn, refresh;
+  boolean fromTable, goOut, goIn, refresh;
   float downY = 1410, downZ = 320;
   String id;
 
@@ -25,7 +25,7 @@ class Cube
     this.cubeTranZ = tranZ;
     this.speedRota = random(minRota, maxRota);
     this.axeRota = random(-sizeBelt, sizeBelt);
-    this.asMoon = false;
+    this.asMoon = 0;
     this.goOut = false;
     this.isPop = false;
     this.go = false;
@@ -41,7 +41,7 @@ class Cube
     this.refresh = false;
   }
 
-  void setBase(String id, boolean asMoon, boolean fromTable)
+  void setBase(String id, int asMoon, boolean fromTable)
   {
     this.id = id;
     this.asMoon = asMoon;
@@ -52,7 +52,7 @@ class Cube
 
   void setGoOut(boolean go)
   {
-    this.asMoon = false;
+    this.asMoon = 0;
     this.goOut = false;
     this.isPop = false;
     this.go = false;
@@ -129,7 +129,7 @@ class Cube
     vertex(vx[6], vy[6], vz[6]); // v7
     endShape();
 
-    if (asMoon)
+    if (asMoon != 0)
       drawMoon();
   }
 

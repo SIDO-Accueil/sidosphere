@@ -8,7 +8,6 @@ int base = 18, max = 20, min = 10;
 int baseW = 18, maxW = 10, minW = 15;
 int sizeCube = 20;
 int posCam = -1300;
-int nbIn = 0, nbFixe = 0;
 int nbCubesW = 100;
 
 Cube[] Cubes = new Cube[nbCubes + 1];
@@ -125,12 +124,6 @@ void setup()
   createCubes();
   qzeMysql = new MySQL(this, "qze.fr", "sido", "sido", "passwordSido?8!");
   textSize(TEXT_SIZE);
-  /*
-  loadLegend();
-   load();
-   */
-  thread("load");
-  thread("loadLegend");
 }
 
 boolean loadValue = true;
@@ -161,7 +154,8 @@ void draw()
     loadValue = false;
     thread("load");
     thread("loadLegend");
-  } else if (second() % 2 != 0)
+  } 
+  else if (second() % 2 != 0)
     loadValue = true;
   display_stats();
   drawCubes();
