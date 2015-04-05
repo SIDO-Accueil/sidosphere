@@ -83,13 +83,22 @@ class Cube
 
   void drawMoon()
   {
-    rotate(angleMoon, 0, 90, 0);
-    translate(30, 0, 30);
-    noStroke();
-    lights();
-    fill(255, 255, 255);
-    sphere(5);
-    angleMoon += 0.01;
+    int i = 0;
+    
+    while (i < this.asMoon && i < 3)
+    {
+      pushMatrix();
+      rotate(angleMoon, 0, 90, 0);
+      rotateY(90 * (i + 1));
+      translate(30, 0, 30);
+      noStroke();
+      lights();
+      fill(255, 255, 255);
+      sphere(5);
+      angleMoon += 0.01;
+      i++;
+      popMatrix();
+    }
   }
 
   void drawSidome()

@@ -95,12 +95,13 @@ void drawSido()
 void drawCubes()
 {  
   int i = 0;
-
+/*
   directionalLight(255, 255, 255, 0.050000012, -0.6576705, -1);
   directionalLight(255, 255, 255, 0.02352941, 0.43323863, -1);
   directionalLight(255, 255, 255, 0.5323529, 0.42471594, -1);
   directionalLight(255, 255, 255, 0.12647057, -0.024147749, 1);
   directionalLight(255, 255, 255, -0.27647054, 0.009943187, 1);
+*/
   drawWire();
   drawSido();
 }

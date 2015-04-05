@@ -161,9 +161,7 @@ void loadLegend()
 void load()
 {
   JSONObject json;
-  /*
-  json = loadJSONObject("in.json");
-   */
+
   GetRequest get = new GetRequest("http://sido.qze.fr:3000/sidomes");
   get.send();
   json = parseJSONObject(get.getContent());
