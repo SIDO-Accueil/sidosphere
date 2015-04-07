@@ -7,7 +7,7 @@ int nbIn = 0, nbFixe = 0, nbSup = 0;
 
 boolean depop(int pos)
 {
-  if (second() % 20 == 0 && nbFixe > 60)
+  if (second() % 30 == 0 && nbFixe > 80)
    {
      nbFixe -= 3;
      nbIn = 3;
@@ -117,7 +117,7 @@ void parseIn(JSONObject json)
       while (j < nbCubes && Cubes[j].id != null)
         j++;
       boolean fromTable = perso.getBoolean("fromTable");
-      int twitter = perso.getInt("tweets");
+      int twitter = 0;//perso.getInt("tweets");
       Cubes[j].setBase(id, twitter, fromTable);
       if (!fromTable)
         Cubes[j].goIn = true;
@@ -142,33 +142,83 @@ void parseOut(JSONObject json)
   }
 }
 
-void loadLegend()
+class loadLegend implements Runnable
 {
-  JSONObject json;
-
-  GetRequest get = new GetRequest("http://sido.qze.fr:3000/stats");
-  get.send();
-  json = parseJSONObject(get.getContent());
-  println(get.getContent());
-  gpercent[0] = json.getFloat("ios");
-  gpercent[1] = json.getFloat("android");
-  gpercent[2] = json.getFloat("win");
-  gpercent[3] = json.getFloat("other");
-  gpercent[4] = json.getFloat("iot");
-  gpercent[5] = json.getFloat("sido");
+  void run()
+  {
+    JSONObject json;
+  
+      while (true)
+      {
+        try
+        {
+          GetRequest get = new GetRequest("http://sido.qze.fr:3000/stats");
+          get.send();
+          json = parseJSONObject(get.getContent());
+          println(get.getContent());
+          gpercent[0] = json.getFloat("ios");
+          gpercent[1] = json.getFloat("android");
+          gpercent[2] = json.getFloat("win");
+          gpercent[3] = json.getFloat("sidomesPerso");
+          gpercent[4] = json.getFloat("iot");
+          gpercent[5] = json.getFloat("sido");
+          gpercent[6] = json.getFloat("other");
+          delay(1500);
+        }
+        catch (Exception e)
+        {
+          e.printStackTrace();
+        }
+    }
+  }
 }
 
-void load()
+class laodLastTweet implements Runnable
 {
-  JSONObject json;
+  void run()
+  {
+    JSONObject json;
+  
+    while (true)
+    {
+      try
+      {
+        GetRequest get = new GetRequest("http://sido.qze.fr:3000/tweets/last");
+        get.send();
+        json = parseJSONObject(get.getContent());
+        println(get.getContent());
+        User = json.getString("user");
+        Txt = json.getString("txt");
+        delay(1200);
+      }
+      catch (Exception e)
+       {
+         e.printStackTrace();
+       }
+    }
+  }
+}
 
-  GetRequest get = new GetRequest("http://sido.qze.fr:3000/sidomes");
-  get.send();
-  json = parseJSONObject(get.getContent());
-  println(get.getContent());
-  parseNb(json);
-  parseIn(json);
-  parseOut(json);
+class Loader implements Runnable
+{
+  void run()
+  {
+    JSONObject json;
+  //  json = loadJSONObject("test.json");
+  
+    while (true)
+    {
+        GetRequest get = new GetRequest("http://sido.qze.fr:3000/sidomes");
+        get.send();
+        json = parseJSONObject(get.getContent());
+        println(get.getContent());
+      
+        parseNb(json);
+        parseIn(json);
+        parseOut(json);
+        delay(1000);
+   }
+  }
 }
 
 void deleteCube(String id)
@@ -189,7 +239,7 @@ void deleteCube(String id)
 void refresh(int j)
 {
   boolean fromTable = perso.getBoolean("fromTable");
-  int twitter = perso.getInt("tweets");
+  int twitter = 0;//perso.getInt("tweets");
   Cubes[j].setBase(Cubes[j].id, twitter, fromTable);
   if (!fromTable)
     Cubes[j].goIn = true;

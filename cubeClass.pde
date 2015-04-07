@@ -1,4 +1,4 @@
-float minRota = 0.0005, maxRota = 0.01;
+float minRota = 0.0005, maxRota = 0.005;
 
 class Cube
 {
@@ -14,7 +14,7 @@ class Cube
   int z = 0, asMoon;
   boolean isPop, go;
   boolean fromTable, goOut, goIn, refresh;
-  float downY = 1410, downZ = 320;
+  float downY = 1010, downZ = 320;
   String id;
 
   Cube(float speedY, float speedZ, float tranX, float tranZ)
@@ -65,6 +65,8 @@ class Cube
     this.goOut = false;
     this.goIn = false;
     this.id = null;
+    this.downY = 1010;
+    this.downZ = 320;
   }
 
   void setColor(float newClr, float newClg, float newClb)
@@ -85,16 +87,16 @@ class Cube
   {
     int i = 0;
     
-    while (i < this.asMoon && i < 3)
+    while (i < this.asMoon && i < 6)
     {
       pushMatrix();
       rotate(angleMoon, 0, 90, 0);
-      rotateY(90 * (i + 1));
+      rotateY(60 * (i + 1));
       translate(30, 0, 30);
       noStroke();
       lights();
       fill(255, 255, 255);
-      sphere(5);
+      sphere(4);
       angleMoon += 0.01;
       i++;
       popMatrix();
@@ -174,6 +176,8 @@ class Cube
           this.clg = 0;
           this.clb = 0;
           this.goIn = true;
+          this.downY = 1010;
+          this.downZ = 320; 
         }
     }
     else
